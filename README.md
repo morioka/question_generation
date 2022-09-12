@@ -19,6 +19,8 @@
     - [Evaluation](#evaluation)
   - [Applications 🚀](#applications-)
   - [Relevant papers](#relevant-papers)
+  - [日本語T5対応](#日本語t5対応)
+    - [Requirements](#requirements-1)
 
 
 ## Project Details
@@ -133,6 +135,7 @@ The [nlg-eval](https://github.com/Maluuba/nlg-eval) package is used for calculat
 ```
 transformers==3.0.0
 nltk
+sentencepiece
 nlp==0.2.0 # only if you want to fine-tune.
 ```
 
@@ -217,6 +220,8 @@ The cached dataset should be saved using `torch.save` and it should return a `di
 The `T2TDataCollator` takes care of preparing right `input_ids` and `labels`. It also trims the batches dynamically to remove excessive padding tokens, to speed up the training.
 
 The `data/squad_multitask` containes the modifed SQuAD dataset for answer aware question generation (using both prepend and highlight formats), question answering (text-to-text), answer extraction and end-to-end question generation. This dataset can be loaded using the awesome 🤗`nlp` library, this makes processing very easy.
+`data/squad_multitask` には、answer-aware question-generation向けに修正したSQuADデータセットを含む。containes the modifed SQuAD dataset for answer aware question generation (using both prepend and highlight formats), question answering (text-to-text), answer extraction and end-to-end question generation. This dataset can be loaded using the awesome 🤗`nlp` library, this makes processing very easy.
+
 
 To process and cache the dataset use `prepare_data.py` script. It will load the correct tokenizer depending on the `model_type` argument. It adds two new tokens `<sep>` and `<hl>` to the tokenizer and saves it at `{model_type}_qg_tokenizer` path. You should pass this tokenizer to the fine-tuning script.
 
@@ -238,32 +243,34 @@ python prepare_data.py \
 **process data for multi-task qa-qg with highlight_qg_format**
 
 `valid_for_qg_only` argument is used to decide if the validation set should only contain data for qg task. For my multi-task experiments I used validation data with only qg task so that the eval loss curve can be easly compared with other single task models
+引数 `valid_for_qg_only` は、開発セットが qg タスク用のデータのみを含むよう指定することに使われる。私のmulti-task実験では、qgタスクのみを開発データに用いた。これは他の単一タスクモデルとの学習曲線を容易に比較できるようにするため。
+
 
 ```bash
 python prepare_data.py \
     --task multi \
-    --valid_for_qg_only \ 
+    --valid_for_qg_only yes \
     --model_type t5 \
     --dataset_path data/squad_multitask/ \
     --qg_format highlight_qg_format \
     --max_source_length 512 \
     --max_target_length 32 \
     --train_file_name train_data_qa_qg_hl_t5.pt \
-    --valid_file_name valid_data_qg_hl_t5.pt \
+    --valid_file_name valid_data_qg_hl_t5.pt
 ```
 
 **process dataset for end-to-end question generation**
 ```bash
 python prepare_data.py \
     --task e2e_qg \
-    --valid_for_qg_only \ 
+    --valid_for_qg_only yes \
     --model_type t5 \
     --dataset_path data/squad_multitask/ \
     --qg_format highlight_qg_format \
     --max_source_length 512 \
     --max_target_length 32 \
     --train_file_name train_data_e2e_qg_t5.pt \
-    --valid_file_name valid_data_e2e_qg_t5.pt \
+    --valid_file_name valid_data_e2e_qg_t5.pt
 ```
 
 ### training
@@ -350,3 +357,33 @@ nlg-eval --hypothesis=hypothesis_t5-base-qg-hl.txt --references=data/references.
 - https://arxiv.org/abs/1906.05416
 - https://www.aclweb.org/anthology/D19-5821/
 - https://arxiv.org/abs/2005.01107v1
+
+
+## 日本語T5対応
+
+- utils.py        おそらく対応不要
+- trainer.py      おそらく対応不要
+- run_qg.py       training_args.prediction_loss_only=True, training_args.remove_unused_columns=False
+- prepare_data.py 未対応(tokenizerをt5-base-japaneseに変更)
+- pipelines.py    おそらく対応不要
+- eval.py         おそらく対応不要
+- data_collator.py  おそらく対応不要
+- data/
+  - squad_multitask/dataset_infos.json splits.train.num_bytes, splits.train.num_examples 未対応(JGUE/JSQuAD向けに変更)
+
+### Requirements
+```
+transformers==4.21.0.dev0
+nltk==3.7
+sentencepiece==0.1.97
+nlp==0.4.0 # only if you want to fine-tune.
+```
+
+after installing `nltk` do
+```bash
+python -m nltk.downloader punkt
+```
+```
+Python 3.9.7
+```
+
