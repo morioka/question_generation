@@ -180,6 +180,7 @@ def main(args_file=None):
 
     # Prediction Loss
     training_args.prediction_loss_only=True
+    training_args.remove_unused_columns=False  # https://github.com/huggingface/transformers/issues/9520#issuecomment-758807683
 
     # Initialize our Trainer
     trainer = Trainer(
