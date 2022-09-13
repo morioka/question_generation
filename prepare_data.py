@@ -145,18 +145,21 @@ def main():
         level=logging.INFO
     )
 
-    if data_args.model_type == 't5':
-        #tokenizer = T5Tokenizer.from_pretrained("t5-base")
+    if data_args.model_type == 't5_ja':
         tokenizer = T5Tokenizer.from_pretrained("sonoisa/t5-base-japanese")
+    elif data_args.model_type == 't5':
+        tokenizer = T5Tokenizer.from_pretrained("t5-base")
     else:
         tokenizer = BartTokenizer.from_pretrained("facebook/bart-base")
     
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
-    #train_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.TRAIN)
-    #valid_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.VALIDATION)
-    train_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.TRAIN, ignore_verifications=True)
-    valid_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.VALIDATION, ignore_verifications=True)
+    if data_args.model_type == 't5_ja':
+        train_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.TRAIN, ignore_verifications=True)
+        valid_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.VALIDATION, ignore_verifications=True)
+    else:
+        train_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.TRAIN)
+        valid_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.VALIDATION)
 
     processor = DataProcessor(
         tokenizer,

@@ -412,7 +412,7 @@ Python 3.9.7
 ```bash
 python prepare_data.py \
     --task qg \
-    --model_type t5 \
+    --model_type t5_ja \
     --dataset_path data/squad_multitask_ja/ \
     --qg_format highlight_qg_format \
     --max_source_length 512 \
