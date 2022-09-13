@@ -146,14 +146,17 @@ def main():
     )
 
     if data_args.model_type == 't5':
-        tokenizer = T5Tokenizer.from_pretrained("t5-base")
+        #tokenizer = T5Tokenizer.from_pretrained("t5-base")
+        tokenizer = T5Tokenizer.from_pretrained("sonoisa/t5-base-japanese")
     else:
         tokenizer = BartTokenizer.from_pretrained("facebook/bart-base")
     
     tokenizer.add_tokens(['<sep>', '<hl>'])
     
-    train_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.TRAIN)
-    valid_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.VALIDATION)
+    #train_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.TRAIN)
+    #valid_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.VALIDATION)
+    train_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.TRAIN, ignore_verifications=True)
+    valid_dataset = nlp.load_dataset(data_args.dataset_path, name=data_args.qg_format, split=nlp.Split.VALIDATION, ignore_verifications=True)
 
     processor = DataProcessor(
         tokenizer,
