@@ -20,6 +20,8 @@
   - [Applications 🚀](#applications-)
   - [Relevant papers](#relevant-papers)
   - [日本語T5対応](#日本語t5対応)
+    - [step-1 transformers-4.x 対応](#step-1-transformers-4x-対応)
+    - [step-2 JGLUE/JSQuAD 対応](#step-2-jgluejsquad-対応)
     - [Requirements](#requirements-1)
 
 
@@ -237,7 +239,7 @@ python prepare_data.py \
     --max_source_length 512 \
     --max_target_length 32 \
     --train_file_name train_data_qg_hl_t5.pt \
-    --valid_file_name valid_data_qg_hl_t5.pt \
+    --valid_file_name valid_data_qg_hl_t5.pt
 ```
 
 **process data for multi-task qa-qg with highlight_qg_format**
@@ -293,7 +295,8 @@ python run_qg.py \
     --seed 42 \
     --do_train \
     --do_eval \
-    --evaluate_during_training \
+    --evaluation_strategy steps \
+    --eval_steps 100 \
     --logging_steps 100
 ```
 
@@ -317,7 +320,8 @@ args_dict = {
     "seed": 42,
     "do_train": True,
     "do_eval": True,
-    "evaluate_during_training": True,
+    "evaluation_strategy": "steps",
+    "eval_steps": 100,
     "logging_steps": 100
 }
 
@@ -361,6 +365,8 @@ nlg-eval --hypothesis=hypothesis_t5-base-qg-hl.txt --references=data/references.
 
 ## 日本語T5対応
 
+### step-1 transformers-4.x 対応
+
 - utils.py        おそらく対応不要
 - trainer.py      おそらく対応不要
 - run_qg.py       training_args.prediction_loss_only=True, training_args.remove_unused_columns=False
@@ -370,6 +376,11 @@ nlg-eval --hypothesis=hypothesis_t5-base-qg-hl.txt --references=data/references.
 - data_collator.py  おそらく対応不要
 - data/
   - squad_multitask/dataset_infos.json splits.train.num_bytes, splits.train.num_examples 未対応(JGUE/JSQuAD向けに変更)
+
+### step-2 JGLUE/JSQuAD 対応
+
+- data/
+  - jsquad_multitask/dataset_infos.json 新規に作成
 
 ### Requirements
 ```

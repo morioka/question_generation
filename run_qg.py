@@ -182,10 +182,6 @@ def main(args_file=None):
     training_args.prediction_loss_only=True
     training_args.remove_unused_columns=False  # https://github.com/huggingface/transformers/issues/9520#issuecomment-758807683
 
-    # evaluate_during_training=True
-    training_args.evaluation_strategy='steps'
-    training_args.eval_steps=500
-
     # Initialize our Trainer
     trainer = Trainer(
         model=model,
