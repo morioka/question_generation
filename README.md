@@ -391,7 +391,15 @@ nlg-eval --hypothesis=hypothesis_t5-base-qg-hl.txt --references=data/references.
 ### step-2 JGLUE/JSQuAD 対応
 
 - data/
-  - jsquad_multitask/dataset_infos.json 新規に作成
+  - ~~~jsquad_multitask/dataset_infos.json 新規に作成~~~
+  - squad_multitask_ja/ を新規に追加。cached datasetのファイル名の都合で名前変更
+    - squad_multitask_ja.py
+    - squad_multitask_ja.py.lock
+    - dataset_infos.json
+- prepare_data.py
+  - データセットロード時の検証を省略
+  - `t5_ja` を指定したときに `sonoisa/t5-base-japanese` を利用する
+  - TODO: 日本語文の区切り
 
 ### Requirements
 ```
