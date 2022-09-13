@@ -1,3 +1,4 @@
 *.pt
 __pycache__
 t5_qg_tokenizer/
+t5_ja_qg_tokenizer/

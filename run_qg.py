@@ -25,6 +25,7 @@ from data_collator import T2TDataCollator
 from utils import freeze_embeds, assert_not_all_frozen
 
 MODEL_TYPE_TO_TOKENIZER = {
+    "t5_ja": T5Tokenizer, 
     "t5": T5Tokenizer,
     "bart": BartTokenizer,
 }
@@ -42,7 +43,7 @@ class ModelArguments:
     model_name_or_path: str = field(
         metadata={"help": "Path to pretrained model or model identifier from huggingface.co/models"}
     )
-    model_type: str = field(metadata={"help": "One of 't5', 'bart'"})
+    model_type: str = field(metadata={"help": "One of 't5_ja', t5', 'bart'"})
     tokenizer_name_or_path: Optional[str] = field(
         default=None, metadata={"help": "Pretrained tokenizer name or path if not the same as model_name"}
     )
@@ -106,7 +107,7 @@ def main(args_file=None):
     else:
         model_args, data_args, training_args = parser.parse_args_into_dataclasses()
 
-    assert model_args.model_type in list(MODEL_TYPE_TO_TOKENIZER.keys()), "model type should be 't5' or 'bart'"
+    assert model_args.model_type in list(MODEL_TYPE_TO_TOKENIZER.keys()), "model type should be 't5_ja', 't5' or 'bart'"
 
     if (
         os.path.exists(training_args.output_dir)
