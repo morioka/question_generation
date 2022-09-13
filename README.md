@@ -377,6 +377,17 @@ nlg-eval --hypothesis=hypothesis_t5-base-qg-hl.txt --references=data/references.
 - data/
   - squad_multitask/dataset_infos.json splits.train.num_bytes, splits.train.num_examples 未対応(JGUE/JSQuAD向けに変更)
 
+以下を適用
+- [prediction_loss_only as an arg by tacerdi · Pull Request #86 · patil-suraj/question_generation](https://github.com/patil-suraj/question_generation/pull/86)
+- [T2TDataCollator 'target_ids' key error · Issue #9520 · huggingface/transformers](https://github.com/huggingface/transformers/issues/9520#issuecomment-758807683)
+- [No such file or directory: '/root/.cache/huggingface/datasets/squad_multitask/highlight_qg_format/1.0.0/dataset_info.json' · Issue #98 · patil-suraj/question_generation](https://github.com/patil-suraj/question_generation/issues/98#issuecomment-1212364787)
+
+??
+- [How can i run this project with transformers 4?. · Issue #95 · patil-suraj/question_generation](https://github.com/patil-suraj/question_generation/issues/95)
+  - [Fixed substring not found error by Hemanth21k · Pull Request #87 · patil-suraj/question_generation](https://github.com/patil-suraj/question_generation/pull/87)
+    - [ValueError: substring not found · Issue #94 · patil-suraj/question_generation](https://github.com/patil-suraj/question_generation/issues/94)
+    - [Install Question-Generation via pip rather than cloning by sfahad1414 · Pull Request #34 · patil-suraj/question_generation](https://github.com/patil-suraj/question_generation/pull/34)
+  
 ### step-2 JGLUE/JSQuAD 対応
 
 - data/
