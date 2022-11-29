@@ -23,6 +23,7 @@
     - [step-1 transformers-4.x 対応](#step-1-transformers-4x-対応)
     - [step-2 JGLUE/JSQuAD 対応](#step-2-jgluejsquad-対応)
     - [Requirements](#requirements-1)
+    - [step-3 学習できるのか?](#step-3-学習できるのか)
 
 
 ## Project Details
@@ -277,7 +278,7 @@ python prepare_data.py \
 
 ### training
 Use the `run_qg.py` script to  start training. It uses transformers `Trainer` class for training the models.
-
+学習には `run_qg.py` スクリプトを用いる。これはモデルの学習に transformers `Trainer` クラスを用いている。
 
 ```bash
 python run_qg.py \
@@ -301,6 +302,7 @@ python run_qg.py \
 ```
 
 or if you want to train it from script or notebook then
+あるいは、スクリプトやノートブックから学習したい場合には次のようにする
 
 ```python3
 from run_qg import run_qg
@@ -429,3 +431,24 @@ python prepare_data.py \
     --valid_file_name valid_data_qg_hl_t5_ja.pt
 
 ```
+
+### step-3 学習できるのか?
+
+python run_qg.py \
+    --model_name_or_path sonoisa/t5-base-japanese \
+    --model_type t5_ja \
+    --tokenizer_name_or_path t5_qg_tokenizer \
+    --output_dir t5-small-qg-hl_ja \
+    --train_file_path data/train_data_qg_hl_t5_ja.pt \
+    --valid_file_path data/valid_data_qg_hl_t5_ja.pt \
+    --per_device_train_batch_size 32 \
+    --per_device_eval_batch_size 32 \
+    --gradient_accumulation_steps 8 \
+    --learning_rate 1e-4 \
+    --num_train_epochs 10 \
+    --seed 42 \
+    --do_train \
+    --do_eval \
+    --evaluation_strategy steps \
+    --eval_steps 100 \
+    --logging_steps 100
